@@ -1,3 +1,6 @@
+import { CButton } from "@/components/CButton";
+import { Logo } from "@/components/SiteLogo";
+import ThemeToggle from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/AuthContext";
@@ -22,17 +25,22 @@ function Dashboard() {
 
   useEffect(() => {
     console.log(session?.access_token);
-  });
+  }, [session]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-svh gap-2 p-20">
-      <Button
+    <div className="flex flex-col gap-2 max-w-sm m-20">
+      <ThemeToggle />
+      <Logo />
+      <CButton
         onClick={() => {
           handleLogout();
         }}
       >
         Logout
-      </Button>
+      </CButton>
+
+      <div className="mt-5" />
+
       <Input
         placeholder="server name"
         value={name}
