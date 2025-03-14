@@ -22,11 +22,11 @@ interface AuthContextType {
   error: string | null;
   signUp: (email: string, password: string) => Promise<AuthResponse>;
   signIn: (email: string, password: string) => Promise<AuthResponse>;
-  signInWithGoogle: () => Promise<OAuthResponse>;
+  signInWithGoogle: () => Promise<OAuthResponse | undefined>;
   signOut: () => Promise<void>;
   resetPassword: (
     email: string,
-  ) => Promise<{ data: {}; error: AuthError | null }>;
+  ) => Promise<{ data: unknown; error: AuthError | null }>;
   clearError: () => void;
   supabase: SupabaseClient;
 }
@@ -141,7 +141,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const signInWithGoogle = async (): Promise<OAuthResponse> => {
+  const signInWithGoogle = async (): Promise<OAuthResponse | undefined> => {
     setLoading(true);
     try {
       const response = await supabase.auth.signInWithOAuth({
@@ -187,7 +187,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Testing pending
   const resetPassword = async (
     email: string,
-  ): Promise<{ data: {}; error: AuthError | null }> => {
+  ): Promise<{ data: unknown; error: AuthError | null }> => {
     try {
       setLoading(true);
       setError(null);
