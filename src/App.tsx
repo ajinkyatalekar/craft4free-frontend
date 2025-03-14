@@ -10,6 +10,7 @@ import Landing from "@/pages/Landing";
 import Servers from "@/pages/Dashboard/Servers";
 import Login from "@/pages/Auth/Login";
 import Register from "@/pages/Auth/Register";
+import ServerPanel from "@/pages/Dashboard/ServerPanel";
 
 const ProtectedLayout = () => {
   const { user, loading } = useAuth();
@@ -33,6 +34,7 @@ const App: React.FC = () => {
         </Route>
         <Route element={<ProtectedLayout />}>
           <Route path="/servers" element={<Servers />} />
+          <Route path="/servers/:server_id" element={<ServerPanel />} />
         </Route>
       </Routes>
     </BrowserRouter>

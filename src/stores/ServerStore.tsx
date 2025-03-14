@@ -18,6 +18,7 @@ interface ServerState {
     token: string,
   ) => Promise<ServerCreationResp>;
   refreshServers: () => Promise<void>;
+  getServer: (server_id: string) => Promise<Server | null>;
 }
 
 const useServerStore = create<ServerState>((set) => ({
@@ -87,6 +88,33 @@ const useServerStore = create<ServerState>((set) => ({
         isLoading: false,
         error: errorMessage,
       });
+    }
+  },
+
+  getServer: async (server_id: string) => {
+    set({ isLoading: true });
+    try {
+      // Access servers from the state, not from an undefined variable
+      const { data, error } = await supabase
+        .from("servers")
+        .select("*")
+        .eq("id", server_id)
+        .single();
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      set({ isLoading: false, error: null });
+      return data as Server;
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to get server";
+      set({
+        isLoading: false,
+        error: errorMessage,
+      });
+      return null; // Make sure to return null for the error case
     }
   },
 }));

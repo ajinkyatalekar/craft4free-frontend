@@ -4,23 +4,6 @@
  */
 
 export interface paths {
-    "/server/{server_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Server */
-        get: operations["get_server_server__server_id__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/server": {
         parameters: {
             query?: never;
@@ -32,6 +15,23 @@ export interface paths {
         put?: never;
         /** Create New Server */
         post: operations["create_new_server_server_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/server/{server_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Server */
+        get: operations["get_server_server__server_id__get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -138,6 +138,13 @@ export interface components {
             type: string;
             /** Version */
             version: string;
+            /** Status */
+            status: string;
+        };
+        /** ServerStartReq */
+        ServerStartReq: {
+            /** Server Id */
+            server_id: string;
         };
         /** ServerStartResp */
         ServerStartResp: {
@@ -164,37 +171,6 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    get_server_server__server_id__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                server_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
     create_new_server_server_post: {
         parameters: {
             query?: never;
@@ -228,7 +204,7 @@ export interface operations {
             };
         };
     };
-    start_server__server__server_id__start_post: {
+    get_server_server__server_id__get: {
         parameters: {
             query?: never;
             header?: never;
@@ -238,6 +214,39 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    start_server__server__server_id__start_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ServerStartReq"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
