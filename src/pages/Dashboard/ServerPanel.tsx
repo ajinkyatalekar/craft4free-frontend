@@ -44,7 +44,7 @@ function ServerPanel() {
     const body: ServerStartReq = { server_id: server_id };
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/server/${server_id}/start`,
+        `http://129.213.144.81:8000/server/${server_id}/start`,
         {
           method: "POST",
           headers: {
@@ -78,7 +78,7 @@ function ServerPanel() {
     const body: ServerStartReq = { server_id: server_id };
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/server/${server_id}/stop`,
+        `http://129.213.144.81:8000/server/${server_id}/stop`,
         {
           method: "POST",
           headers: {
@@ -104,7 +104,7 @@ function ServerPanel() {
     const body: ServerStartReq = { server_id: server_id };
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/server/${server_id}/delete`,
+        `http://129.213.144.81:8000/server/${server_id}/delete`,
         {
           method: "POST",
           headers: {
