@@ -7,6 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import { components } from "@/../api.types";
 import { useNavigate } from "react-router-dom";
 import { IconX } from "@tabler/icons-react";
+import { API_URL } from "@/utils/server";
 
 type Server = Tables<"servers">;
 
@@ -43,17 +44,14 @@ function ServerPanel() {
     if (!server_id) return;
     const body: ServerStartReq = { server_id: server_id };
     try {
-      const response = await fetch(
-        `http://129.213.144.81:8000/server/${server_id}/start`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session?.access_token}`,
-          },
-          body: JSON.stringify(body),
+      const response = await fetch(`${API_URL}/server/${server_id}/start`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.access_token}`,
         },
-      );
+        body: JSON.stringify(body),
+      });
 
       const result: ServerStartResp = await response.json();
 
@@ -77,17 +75,14 @@ function ServerPanel() {
     if (!server_id) return;
     const body: ServerStartReq = { server_id: server_id };
     try {
-      const response = await fetch(
-        `http://129.213.144.81:8000/server/${server_id}/stop`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session?.access_token}`,
-          },
-          body: JSON.stringify(body),
+      const response = await fetch(`${API_URL}/server/${server_id}/stop`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.access_token}`,
         },
-      );
+        body: JSON.stringify(body),
+      });
 
       const result: ServerStartResp = await response.json();
 
@@ -103,17 +98,14 @@ function ServerPanel() {
     if (!server_id) return;
     const body: ServerStartReq = { server_id: server_id };
     try {
-      const response = await fetch(
-        `http://129.213.144.81:8000/server/${server_id}/delete`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session?.access_token}`,
-          },
-          body: JSON.stringify(body),
+      const response = await fetch(`${API_URL}/server/${server_id}/delete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.access_token}`,
         },
-      );
+        body: JSON.stringify(body),
+      });
 
       const result: ServerStartResp = await response.json();
       navigate("/servers");

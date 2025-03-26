@@ -29,7 +29,7 @@ const useServerStore = create<ServerState>((set) => ({
   addServer: async (serverData: ServerCreationReq, token: string) => {
     set({ isLoading: true });
     try {
-      const response = await fetch("http://129.213.144.81:8000/server", {
+      const response = await fetch("https://api.craft4free.online/server", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

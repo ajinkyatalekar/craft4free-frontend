@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.PROD
   ? "PROD_URL"
-  : "http://129.213.144.81:8000/";
+  : "http://api.craft4free.online/";
 
 export async function createServer(server: string, access_token: string) {
   try {

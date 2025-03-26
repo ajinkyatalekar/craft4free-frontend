@@ -18,7 +18,8 @@ function Servers() {
 
   useEffect(() => {
     refreshServers();
-  }, [refreshServers]);
+    console.log(session?.access_token);
+  }, [refreshServers, session]);
 
   const handleLogout = async () => {
     await signOut();

@@ -11,8 +11,10 @@ import { useNavigate } from "react-router-dom";
 function Login() {
   const { signIn, signInWithGoogle, error } = useAuth();
   const [formData, setFormData] = useState({
-    email: "test@gmail.com",
-    password: "password",
+    email: "",
+    password: "",
+    // email: "test@gmail.com",
+    // password: "password",
   });
   const [loading, setLoading] = useState(false);
 
