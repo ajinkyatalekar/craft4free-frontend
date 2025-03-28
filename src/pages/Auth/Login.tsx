@@ -1,27 +1,30 @@
-import ThemeToggle from "@/components/ThemeToggle";
-import { Logo } from "@/components/SiteLogo";
 import { useAuth } from "@/context/AuthContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { CButton } from "@/components/CButton";
 
 import { useNavigate } from "react-router-dom";
 
+import { GalleryVerticalEnd } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
 function Login() {
-  const { signIn, signInWithGoogle, error } = useAuth();
+  const navigate = useNavigate();
+  const { signIn, signInWithGoogle, error, clearError } = useAuth();
+
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    // email: "test@gmail.com",
-    // password: "password",
   });
-  const [loading, setLoading] = useState(false);
-
-  const navigate = useNavigate();
-  const handleRegisterRedirect = () => {
-    navigate("/register");
-  };
 
   const handleLogin = async () => {
     setLoading(true);
@@ -43,64 +46,124 @@ function Login() {
     setLoading(false);
   };
 
+  const handleRegisterNavigate = () => {
+    clearError();
+    navigate("/register");
+  };
+
   return (
-    <div className="flex flex-col gap-2 max-w-sm m-20">
-      <ThemeToggle />
-      <Logo />
-      <div className="mt-5" />
-
-      <p className="text-xl">Welcome to Craft4Free.com</p>
-      <CButton
-        onClick={() => {
-          handleRegisterRedirect();
-        }}
-        className="cursor-pointer"
-        disabled={loading}
-      >
-        Register
-      </CButton>
-      <p>Or</p>
-
-      <div className="flex flex-col gap-4">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-        />
-        <Label htmlFor="password">Password</Label>
-        <Input
-          id="password"
-          type="password"
-          value={formData.password}
-          onChange={(e) =>
-            setFormData({ ...formData, password: e.target.value })
-          }
-        />
-        <CButton
-          onClick={() => {
-            handleLogin();
-          }}
-          className="cursor-pointer"
-          disabled={loading}
+    <div className="flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10 bg-gray-700 bg-[url(assets/background/caves.png)] bg-right-bottom bg-blend-soft-light">
+      <div className="flex w-full max-w-sm flex-col gap-3">
+        <a
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2 self-center font-medium cursor-pointer p-2 rounded-md"
         >
-          Login
-        </CButton>
+          <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+            <GalleryVerticalEnd className="size-4" />
+          </div>
+          Craft4Free.online
+        </a>
+
+        <div className="flex flex-col gap-3">
+          <Card>
+            <CardHeader className="text-center">
+              <CardTitle className="text-xl">Welcome back!</CardTitle>
+              <CardDescription>Login to access your servers</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-6">
+                <div className="flex flex-col gap-4">
+                  <Button
+                    variant="outline"
+                    className="w-full cursor-pointer"
+                    onClick={() => {
+                      handleGoogleOAuth();
+                    }}
+                    disabled={loading}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                      <path
+                        d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    Login with Google
+                  </Button>
+                </div>
+                <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+                  <span className="bg-card text-muted-foreground relative z-10 px-2">
+                    Or continue with
+                  </span>
+                </div>
+                {/* <form> */}
+                <div className="grid gap-6">
+                  <div className="grid gap-3">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="m@example.com"
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+                  <div className="grid gap-3">
+                    <div className="flex items-center">
+                      <Label htmlFor="password">Password</Label>
+                      <a
+                        href="#"
+                        className="ml-auto text-sm underline-offset-4 hover:underline"
+                      >
+                        Forgot your password?
+                      </a>
+                    </div>
+                    <Input
+                      id="password"
+                      type="password"
+                      value={formData.password}
+                      onChange={(e) =>
+                        setFormData({ ...formData, password: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+                  <Button
+                    // type="submit"
+                    className="w-full cursor-pointer"
+                    onClick={() => {
+                      handleLogin();
+                    }}
+                    disabled={loading}
+                  >
+                    Login
+                  </Button>
+                </div>
+                {/* </form> */}
+                <div className="text-center text-sm">
+                  Don&apos;t have an account?{" "}
+                  <a
+                    onClick={() => handleRegisterNavigate()}
+                    className="underline underline-offset-4 cursor-pointer"
+                  >
+                    Sign up
+                  </a>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <div className="text-red-400 text-center text-sm text-balance">
+            {error}
+          </div>
+
+          {/* <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+            By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
+            and <a href="#">Privacy Policy</a>.
+          </div> */}
+        </div>
       </div>
-
-      <p>Or</p>
-
-      <CButton
-        onClick={() => {
-          handleGoogleOAuth();
-        }}
-        className="cursor-pointer"
-        disabled={loading}
-      >
-        Continue with Google
-      </CButton>
-
-      <p>{error}</p>
     </div>
   );
 }
