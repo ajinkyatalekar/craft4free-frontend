@@ -99,6 +99,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         throw response.error;
       }
 
+      setError(
+        "Confirmation email sent! Please check your inbox to complete signup.",
+      );
+
       return response;
     } catch (error) {
       if (error instanceof AuthError) {

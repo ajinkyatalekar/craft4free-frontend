@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { GalleryVerticalEnd } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -59,7 +59,7 @@ function Login() {
           className="flex items-center gap-2 self-center font-medium cursor-pointer p-2 rounded-md"
         >
           <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <GalleryVerticalEnd className="size-4" />
+            <ChevronLeft className="size-4" />
           </div>
           Craft4Free.online
         </a>
@@ -67,8 +67,10 @@ function Login() {
         <div className="flex flex-col gap-3">
           <Card>
             <CardHeader className="text-center">
-              <CardTitle className="text-xl">Welcome back!</CardTitle>
-              <CardDescription>Login to access your servers</CardDescription>
+              <CardTitle className="text-xl">Login</CardTitle>
+              <CardDescription>
+                Welcome back! Login to access your servers.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-6">
