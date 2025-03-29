@@ -10,12 +10,11 @@ function Landing() {
 
   return (
     <>
-      {/* Hero Section - Full Viewport Height */}
       <div className="h-screen bg-gray-800 bg-[url(assets/background/caves.png)] bg-blend-overlay bg-cover flex flex-col">
         <div className="flex flex-col items-center justify-center flex-grow gap-4 px-20">
           <Logo otherStyles="w-[20rem]" />
           <p className="pt-5" />
-          <p className="text-7xl font-bold">Free Minecraft Servers</p>
+          <p className="text-7xl">Free Minecraft Servers</p>
           <p className="text-2xl text-muted-foreground">
             Play Minecraft with your friends for free!
           </p>
@@ -34,7 +33,7 @@ function Landing() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl mb-4">How We Keep Servers Free</h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Craft4Free provides premium Minecraft servers at zero cost to our
               players.
             </p>
@@ -140,6 +139,10 @@ function Landing() {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="bg-background p-5">
+        <p className="text-sm text-center">© 2025 by Ajinkya Talekar</p>
       </div>
     </>
   );
