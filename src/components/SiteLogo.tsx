@@ -1,14 +1,14 @@
 import { useNavigate } from "react-router-dom";
+import logo from "@/assets/images/logo.png";
 
 export const Logo = () => {
   const navigate = useNavigate();
 
   return (
-    <p
-      className="text-2xl cursor-pointer font-lora"
+    <img
+      src={logo}
+      className="w-44 cursor-pointer"
       onClick={() => navigate("/")}
-    >
-      Craft4Free.com
-    </p>
+    />
   );
 };
