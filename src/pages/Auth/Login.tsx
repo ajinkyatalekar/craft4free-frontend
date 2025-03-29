@@ -52,7 +52,7 @@ function Login() {
   };
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10 bg-gray-700 bg-[url(assets/background/caves.png)] bg-right-bottom bg-blend-soft-light">
+    <div className="flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10 bg-gray-700 bg-[url(assets/background/ocean.png)] bg-right-bottom bg-blend-soft-light">
       <div className="flex w-full max-w-sm flex-col gap-3">
         <a
           onClick={() => navigate("/")}
