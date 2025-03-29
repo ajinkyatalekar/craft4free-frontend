@@ -1,13 +1,33 @@
 import { useNavigate } from "react-router-dom";
-import logo from "@/assets/images/logo3.png";
 
-export const Logo = ({ otherStyles }: { otherStyles?: string }) => {
+import dark from "@/assets/images/logo/Dark.png";
+import darkAnimated from "@/assets/images/logo/DarkAnimated.gif";
+import darkSmall from "@/assets/images/logo/DarkSmall.png";
+// import light from "@/assets/images/logo/Light.png";
+// import lightAnimated from "@/assets/images/logo/LightAnimated.gif";
+
+export const Logo = ({
+  otherStyles,
+  stat,
+  sm,
+}: {
+  otherStyles?: string;
+  stat?: boolean;
+  sm?: boolean;
+}) => {
   const navigate = useNavigate();
+
+  const getLogo = () => {
+    if (sm) {
+      return darkSmall;
+    }
+    return stat ? dark : darkAnimated;
+  };
 
   return (
     <img
-      src={logo}
-      className={`w-[10rem] cursor-pointer ${otherStyles}`}
+      src={getLogo()}
+      className={`cursor-pointer ${otherStyles}`}
       onClick={() => navigate("/")}
     />
   );

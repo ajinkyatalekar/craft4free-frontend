@@ -15,9 +15,9 @@ function Landing() {
         <div className="flex flex-col items-center justify-center flex-grow gap-4 px-20">
           <Logo otherStyles="w-[20rem]" />
           <p className="pt-5" />
-          <p className="text-7xl">Free Minecraft Servers</p>
+          <p className="text-7xl font-bold">Free Minecraft Servers</p>
           <p className="text-2xl text-muted-foreground">
-            Create and manage your own Minecraft servers for free!
+            Play Minecraft with your friends for free!
           </p>
           <div className="mt-2" />
           <CButton
@@ -123,7 +123,7 @@ function Landing() {
                   This approach allows us to provide a premium gaming experience
                   while keeping it 100% free for everyone to enjoy.
                 </p>
-                <p className="text-lg mb-8">
+                <p className="text-lg font mb-8">
                   Please disable ad blocking or whitelist craft4free to support
                   our services and keep craft4free free :)
                 </p>
