@@ -57,7 +57,7 @@ function Login() {
           onClick={() => navigate("/")}
           className="flex items-center gap-2 self-center font-medium cursor-pointer p-2 rounded-md"
         >
-          <Logo />
+          <Logo otherStyles="w-[18rem]" />
         </a>
 
         <div className="flex flex-col gap-3">
