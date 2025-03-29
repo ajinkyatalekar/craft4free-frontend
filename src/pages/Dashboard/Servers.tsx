@@ -264,7 +264,7 @@ function Servers() {
           {/* Create New Server Card */}
           {servers.length != 0 && (
             <Card
-              className="flex flex-col items-center justify-center h-full border-dashed cursor-pointer hover:bg-gray-800 transition-colors bg-gray-900 bg-[url(assets/background/caves.png)] bg-blend-overlay bg-cover"
+              className="flex flex-col items-center justify-center h-full border-dashed cursor-pointer hover:bg-gray-800 transition-colors sm:bg-gray-900 sm:bg-[url(assets/background/caves.png)] bg-blend-overlay bg-cover"
               onClick={() => setCreateDialogOpen(true)}
             >
               <CardContent className="flex flex-col items-center justify-center py-12">
