@@ -15,7 +15,7 @@ function Landing() {
         <div className="p-10">
           <Logo />
         </div>
-        <div className="flex flex-col items-center justify-center flex-grow gap-4">
+        <div className="flex flex-col items-center justify-center flex-grow gap-4 px-20">
           <p className="text-7xl">Free Minecraft Servers</p>
           <p className="text-2xl text-muted-foreground">
             Create and manage your own Minecraft servers for free!
