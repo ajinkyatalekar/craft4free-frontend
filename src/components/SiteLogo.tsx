@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import logo from "@/assets/images/logo.png";
+import logo from "@/assets/images/logo3.png";
 
-export const Logo = () => {
+export const Logo = ({ otherStyles }: { otherStyles?: string }) => {
   const navigate = useNavigate();
 
   return (
     <img
       src={logo}
-      className="w-44 cursor-pointer"
+      className={`w-[10rem] cursor-pointer ${otherStyles}`}
       onClick={() => navigate("/")}
     />
   );

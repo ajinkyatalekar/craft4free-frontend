@@ -12,10 +12,9 @@ function Landing() {
     <>
       {/* Hero Section - Full Viewport Height */}
       <div className="h-screen bg-gray-800 bg-[url(assets/background/caves.png)] bg-blend-overlay bg-cover flex flex-col">
-        <div className="p-10">
-          <Logo />
-        </div>
         <div className="flex flex-col items-center justify-center flex-grow gap-4 px-20">
+          <Logo otherStyles="w-[20rem]" />
+          <p className="pt-5" />
           <p className="text-7xl">Free Minecraft Servers</p>
           <p className="text-2xl text-muted-foreground">
             Create and manage your own Minecraft servers for free!
@@ -31,7 +30,7 @@ function Landing() {
         </div>
       </div>
 
-      <div className="py-20 bg-accent">
+      <div className="py-20 bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl mb-4">How We Keep Servers Free</h2>
