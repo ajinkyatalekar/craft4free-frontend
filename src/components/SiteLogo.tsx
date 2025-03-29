@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 
-import dark from "@/assets/images/logo/dark.png";
-import darkAnimated from "@/assets/images/logo/darkAnimated.gif";
-import darkSmall from "@/assets/images/logo/darkSmall.png";
-// import light from "@/assets/images/logo/light.png";
-// import lightAnimated from "@/assets/images/logo/lightAnimated.gif";
+import dark from "@/assets/images/logo/Dark.png";
+import darkAnimated from "@/assets/images/logo/DarkAnimated.gif";
+import darkSmall from "@/assets/images/logo/DarkSmall.png";
+// import light from "@/assets/images/logo/Light.png";
+// import lightAnimated from "@/assets/images/logo/LightAnimated.gif";
 
 export const Logo = ({
   otherStyles,
