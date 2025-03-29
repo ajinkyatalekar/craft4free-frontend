@@ -10,9 +10,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Logo } from "@/components/SiteLogo";
 import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export function SiteHeader() {
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const mainNav = [
     {
@@ -42,8 +44,8 @@ export function SiteHeader() {
                   item.href && (
                     <Button key={index} variant="ghost" asChild>
                       <a
-                        href={item.href}
-                        className="text-sm font-medium transition-colors hover:text-primary"
+                        onClick={() => navigate(item.href)}
+                        className="text-sm font-medium transition-colors hover:text-primary cursor-pointer"
                       >
                         {item.title}
                       </a>
@@ -71,7 +73,7 @@ export function SiteHeader() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className="w-56 -mr-1"
+                className="w-68 -mr-1"
                 align="end"
                 forceMount
               >
