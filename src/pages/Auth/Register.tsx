@@ -5,8 +5,6 @@ import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { ChevronLeft } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Logo } from "@/components/SiteLogo";
 
 function Register() {
   const navigate = useNavigate();
@@ -56,12 +55,9 @@ function Register() {
       <div className="flex w-full max-w-sm flex-col gap-3">
         <a
           onClick={() => navigate("/")}
-          className="flex items-center gap-2 self-center font-medium cursor-pointer p-2 rounded-md"
+          className="flex items-center gap-4 self-center font-medium cursor-pointer p-2 rounded-md"
         >
-          <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <ChevronLeft className="size-4" />
-          </div>
-          Craft4Free.online
+          <Logo />
         </a>
 
         <div className="flex flex-col gap-3">
