@@ -18,7 +18,7 @@ export function SiteHeader() {
 
   const mainNav = [
     {
-      title: "Home",
+      title: "Servers",
       href: "/servers",
     },
   ];
@@ -30,10 +30,10 @@ export function SiteHeader() {
         <div className="flex gap-4 sm:gap-6">
           <span className="inline-block font-bold">
             <div className="sm:hidden">
-              <Logo otherStyles="h-[2.5rem]" sm stat />
+              <Logo otherStyles="h-[2.5rem]" sm stat dashLink />
             </div>
             <div className="hidden sm:block">
-              <Logo otherStyles="h-[2.5rem]" stat />
+              <Logo otherStyles="h-[2.5rem]" stat dashLink />
             </div>
           </span>
 

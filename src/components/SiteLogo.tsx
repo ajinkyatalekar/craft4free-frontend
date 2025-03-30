@@ -10,10 +10,12 @@ export const Logo = ({
   otherStyles,
   stat,
   sm,
+  dashLink,
 }: {
   otherStyles?: string;
   stat?: boolean;
   sm?: boolean;
+  dashLink?: boolean;
 }) => {
   const navigate = useNavigate();
 
@@ -28,7 +30,7 @@ export const Logo = ({
     <img
       src={getLogo()}
       className={`cursor-pointer ${otherStyles}`}
-      onClick={() => navigate("/")}
+      onClick={() => (dashLink ? navigate("/servers") : navigate("/"))}
     />
   );
 };
