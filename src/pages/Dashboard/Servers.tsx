@@ -11,16 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,13 +29,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { toast } from "sonner";
 import {
   RefreshCcw,
@@ -58,6 +43,7 @@ import {
 import { Tables } from "@/../database.types";
 import { API_URL } from "@/utils/server";
 import { components } from "@/../api.types";
+import { CreateServerDialog } from "@/components/Dashboard/CreateServerDialog";
 type Server = Tables<"servers">;
 type ServerStartReq = components["schemas"]["ServerStartReq"];
 type ServerStartResp = components["schemas"]["ServerStartResp"];
@@ -65,60 +51,12 @@ type ServerStartResp = components["schemas"]["ServerStartResp"];
 function Servers() {
   const navigate = useNavigate();
   const { session } = useAuth();
-  const { servers, refreshServers, addServer } = useServerStore();
+  const { servers, refreshServers } = useServerStore();
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
-
-  const [form, setForm] = useState({
-    name: "",
-    type: "PAPER",
-    version: "1.21.4",
-  });
 
   useEffect(() => {
     refreshServers();
   }, [refreshServers, session]);
-
-  const handleAddServer = async () => {
-    if (!session?.access_token) {
-      toast.error("Authentication Error", {
-        description: "You are not authenticated.",
-      });
-      return;
-    }
-
-    if (!form.name.trim()) {
-      toast.error("Validation Error", {
-        description: "Server name cannot be empty.",
-      });
-      return;
-    }
-
-    const result = await addServer(
-      {
-        name: form.name,
-        type: form.type,
-        version: form.version,
-      },
-      session?.access_token,
-    );
-
-    if (result.success) {
-      refreshServers();
-      setCreateDialogOpen(false);
-      setForm({
-        name: "",
-        type: "PAPER",
-        version: "1.21.4",
-      });
-      toast.success("Server Created", {
-        description: `${form.name} was successfully created.`,
-      });
-    } else {
-      toast.error("Error Creating Server", {
-        description: result.error?.message || "An unknown error occurred",
-      });
-    }
-  };
 
   const handleDeleteServer = async (serverId: string, serverName: string) => {
     if (!serverId) return;
@@ -154,11 +92,7 @@ function Servers() {
   };
 
   const handleCopyServer = (server: Server) => {
-    setForm({
-      name: `${server.name} (Copy)`,
-      type: server.type,
-      version: server.version,
-    });
+    console.log("Copying", server.name);
     setCreateDialogOpen(true);
   };
 
@@ -198,6 +132,7 @@ function Servers() {
                     <DropdownMenuItem
                       onClick={() => handleCopyServer(server)}
                       className="cursor-pointer"
+                      disabled
                     >
                       <Copy className="mr-2 h-4 w-4" />
                       <span>Copy</span>
@@ -299,71 +234,10 @@ function Servers() {
         )}
 
         {/* Create Server Dialog */}
-        <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create New Server</DialogTitle>
-              <DialogDescription>
-                Fill in the details below to create your new server.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Server Name</Label>
-                <Input
-                  id="name"
-                  placeholder="My Awesome Server"
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="type">Server Type</Label>
-                <Select
-                  value={form.type}
-                  onValueChange={(value) => setForm({ ...form, type: value })}
-                  disabled
-                >
-                  <SelectTrigger id="type">
-                    <SelectValue placeholder="Select type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="PAPER">Paper</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="version">Server Version</Label>
-                <Select
-                  value={form.version}
-                  onValueChange={(value) =>
-                    setForm({ ...form, version: value })
-                  }
-                  disabled
-                >
-                  <SelectTrigger id="version">
-                    <SelectValue placeholder="Select version" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1.21.4">1.21.4</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => setCreateDialogOpen(false)}
-                className="cursor-pointer"
-              >
-                Cancel
-              </Button>
-              <Button onClick={handleAddServer} className="cursor-pointer">
-                Create Server
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <CreateServerDialog
+          createDialogOpen={createDialogOpen}
+          setCreateDialogOpen={setCreateDialogOpen}
+        />
       </div>
     </>
   );
