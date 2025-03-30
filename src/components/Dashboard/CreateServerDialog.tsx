@@ -44,7 +44,7 @@ export function CreateServerCard({
       className="flex flex-col items-center justify-center h-full border-dashed cursor-pointer hover:bg-gray-800 transition-colors sm:bg-gray-900 sm:bg-[url(assets/background/caves.png)] bg-blend-overlay bg-cover"
       onClick={() => setCreateDialogOpen(true)}
     >
-      <CardContent className="flex flex-col items-center justify-center py-12">
+      <CardContent className="flex flex-col items-center justify-center h-full">
         <div className="p-3 rounded-full bg-primary/10 mb-4">
           <Plus className="h-8 w-8 text-primary" />
         </div>
@@ -78,9 +78,23 @@ export function CreateServerDialog({
       return;
     }
 
-    if (!form.name.trim()) {
+    if (form.name.trim().length < 3 || form.name.trim().length > 20) {
       toast.error("Validation Error", {
-        description: "Server name cannot be empty.",
+        description: "Server name must be 3-20 characters.",
+      });
+      return;
+    }
+
+    if (!form.type.trim()) {
+      toast.error("Validation Error", {
+        description: "Server type cannot be empty.",
+      });
+      return;
+    }
+
+    if (!form.version.trim()) {
+      toast.error("Validation Error", {
+        description: "Version cannot be empty.",
       });
       return;
     }
