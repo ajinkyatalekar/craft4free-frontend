@@ -11,15 +11,22 @@ import {
 import { Logo } from "@/components/SiteLogo";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { HelpCircle, Server } from "lucide-react";
 
-export function SiteHeader() {
+export function SiteHeader({ activeTab }: { activeTab?: string }) {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
   const mainNav = [
     {
-      title: "Home",
+      title: "Servers",
       href: "/servers",
+      icon: Server,
+    },
+    {
+      title: "Help",
+      href: "/help",
+      icon: HelpCircle,
     },
   ];
 
@@ -30,10 +37,10 @@ export function SiteHeader() {
         <div className="flex gap-4 sm:gap-6">
           <span className="inline-block font-bold">
             <div className="sm:hidden">
-              <Logo otherStyles="h-[2.5rem]" sm stat />
+              <Logo otherStyles="h-[2.5rem]" sm stat dashLink />
             </div>
             <div className="hidden sm:block">
-              <Logo otherStyles="h-[2.5rem]" stat />
+              <Logo otherStyles="h-[2.5rem]" stat dashLink />
             </div>
           </span>
 
@@ -45,8 +52,9 @@ export function SiteHeader() {
                     <Button key={index} variant="ghost" asChild>
                       <a
                         onClick={() => navigate(item.href)}
-                        className="text-sm font-medium transition-colors hover:text-primary cursor-pointer"
+                        className={`text-sm font-medium transition-colors cursor-pointer h-full -mb-1 ${activeTab === item.title ? "text-primary" : "text-muted-foreground"}`}
                       >
+                        <item.icon />
                         {item.title}
                       </a>
                     </Button>

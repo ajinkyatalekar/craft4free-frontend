@@ -14,6 +14,7 @@ import {
   OAuthResponse,
 } from "@supabase/supabase-js";
 import supabase from "@/utils/supabase";
+import { toast } from "sonner";
 
 interface AuthContextType {
   user: User | null;
@@ -103,11 +104,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         "Confirmation email sent! Please check your inbox to complete signup.",
       );
 
+      toast.success(
+        "Confirmation email sent! Please check your inbox to complete signup.",
+      );
+
       return response;
     } catch (error) {
-      if (error instanceof AuthError) {
+      if (error instanceof Error) {
+        toast.error(error.message);
         setError(error.message);
       } else {
+        toast.error("An unexpected error occurred during sign up");
         setError("An unexpected error occurred during sign up");
       }
       throw error;
@@ -123,6 +130,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
+
+      if (!email || !password) {
+        throw new Error("Email and password are required");
+      }
+
       const response = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -134,9 +146,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       return response;
     } catch (error) {
-      if (error instanceof AuthError) {
+      if (error instanceof Error) {
+        toast.error(error.message);
         setError(error.message);
       } else {
+        toast.error("Unexpected error, try again later");
         setError("An unexpected error occurred during sign in");
       }
       throw error;
@@ -162,6 +176,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return response;
     } catch (error) {
       console.error(error);
+      toast.error("Unexpected error, try again later");
     } finally {
       setLoading(false);
     }
@@ -178,8 +193,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     } catch (error) {
       if (error instanceof AuthError) {
+        toast.error(error.message);
         setError(error.message);
       } else {
+        toast.error("An unexpected error occurred during sign out");
         setError("An unexpected error occurred during sign out");
       }
       throw error;

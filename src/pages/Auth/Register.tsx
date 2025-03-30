@@ -17,7 +17,7 @@ import { Logo } from "@/components/SiteLogo";
 
 function Register() {
   const navigate = useNavigate();
-  const { signUp, signInWithGoogle, error, clearError } = useAuth();
+  const { signUp, signInWithGoogle, clearError } = useAuth();
 
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -144,9 +144,6 @@ function Register() {
               </div>
             </CardContent>
           </Card>
-          <div className="text-red-400 text-center text-sm text-balance">
-            {error}
-          </div>
 
           {/* <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
             By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
