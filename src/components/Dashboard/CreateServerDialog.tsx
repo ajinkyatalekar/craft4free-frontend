@@ -30,25 +30,7 @@ import {
 import { toast } from "sonner";
 import { CircleHelp } from "lucide-react";
 
-const SERVER_DATA = {
-  PAPER: {
-    description: "Fast and reliable. RECOMMENDED.",
-    longDescription:
-      "High performance Spigot server. Recommended for most users.",
-    versions: ["1.21.4"],
-  },
-  VANILLA: {
-    description: "Official Minecraft server from Mojang.",
-    longDescription:
-      "Official Minecraft server. Pure gameplay experience as intended by Mojang.",
-    versions: ["1.8.9"],
-  },
-  FABRIC: {
-    description: "Lightweight, modern modding platform.",
-    longDescription: "Lightweight, modern modding platform.",
-    versions: ["1.21.4", "1.8.9"],
-  },
-};
+import { SERVER_DATA } from "@/utils/server";
 
 export function CreateServerDialog({
   createDialogOpen,
@@ -228,7 +210,7 @@ const ServerVersionHoverCard = () => {
     <HoverCard>
       <HoverCardTrigger>
         <Label className="mb-2">
-          Server Version
+          Minecraft Version
           <CircleHelp size={12} className="hover:underline -ml-1" />
         </Label>
       </HoverCardTrigger>
