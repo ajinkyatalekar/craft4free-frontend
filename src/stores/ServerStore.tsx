@@ -3,6 +3,7 @@ import supabase from "@/utils/supabase";
 
 import { Tables } from "@/../database.types";
 import { components } from "@/../api.types";
+import { API_URL } from "@/utils/server";
 
 type Server = Tables<"servers">;
 
@@ -29,7 +30,7 @@ const useServerStore = create<ServerState>((set) => ({
   addServer: async (serverData: ServerCreationReq, token: string) => {
     set({ isLoading: true });
     try {
-      const response = await fetch("https://api.craft4free.online/server", {
+      const response = await fetch(`${API_URL}/server`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
