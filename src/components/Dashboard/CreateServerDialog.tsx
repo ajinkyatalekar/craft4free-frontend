@@ -28,9 +28,31 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { CircleHelp } from "lucide-react";
+import { CircleHelp, Plus } from "lucide-react";
+
+import { Card, CardContent } from "@/components/ui/card";
 
 import { SERVER_DATA } from "@/utils/server";
+
+export function CreateServerCard({
+  setCreateDialogOpen,
+}: {
+  setCreateDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  return (
+    <Card
+      className="flex flex-col items-center justify-center h-full border-dashed cursor-pointer hover:bg-gray-800 transition-colors sm:bg-gray-900 sm:bg-[url(assets/background/caves.png)] bg-blend-overlay bg-cover"
+      onClick={() => setCreateDialogOpen(true)}
+    >
+      <CardContent className="flex flex-col items-center justify-center py-12">
+        <div className="p-3 rounded-full bg-primary/10 mb-4">
+          <Plus className="h-8 w-8 text-primary" />
+        </div>
+        <p className="text-xl font-medium text-center">Create New Server</p>
+      </CardContent>
+    </Card>
+  );
+}
 
 export function CreateServerDialog({
   createDialogOpen,

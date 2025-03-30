@@ -12,10 +12,12 @@ function Landing() {
     <>
       <div className="h-screen bg-gray-800 bg-[url(assets/background/caves.png)] bg-blend-overlay bg-cover flex flex-col">
         <div className="flex flex-col items-center justify-center flex-grow gap-4 px-20">
-          <Logo otherStyles="w-[20rem]" />
+          <Logo otherStyles="w-[10rem] sm:w-[20rem]" />
           <p className="pt-5" />
-          <p className="text-7xl">Free Minecraft Servers</p>
-          <p className="text-2xl text-muted-foreground">
+          <p className="text-5xl text-center sm:text-7xl">
+            Free Minecraft Servers
+          </p>
+          <p className="text-xl text-center text-muted-foreground">
             Play Minecraft with your friends for free!
           </p>
           <div className="mt-2" />
