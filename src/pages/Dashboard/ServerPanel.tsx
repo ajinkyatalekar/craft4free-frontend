@@ -21,10 +21,50 @@ function ServerPanel() {
   const { getServer } = useServer();
 
   const { session } = useAuth();
-
-  const [status, setStatus] = useState("Stopped");
-  const [address, setAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const [serverStatus, setServerStatus] = useState({
+    running: false,
+    url: "",
+  });
+
+  const handleFetch = async () => {
+    if (!server_id) return;
+    const body: ServerStartReq = { server_id: server_id };
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/server/${server_id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      const result = await response.json();
+
+      if (result.data.running) {
+        setServerStatus({
+          running: result.data.running,
+          url: result.data.url,
+        });
+      } else {
+        setServerStatus({
+          running: false,
+          url: "",
+        });
+      }
+
+      console.log("Server status fetched:", result);
+
+      return result;
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!server_id) return;
@@ -40,6 +80,11 @@ function ServerPanel() {
 
     fetchServer();
   }, [server_id, getServer]);
+
+  useEffect(() => {
+    if (!server_id || !session?.access_token) return;
+    handleFetch();
+  }, [server_id, session?.access_token]);
 
   const handleStart = async () => {
     if (!server_id) return;
@@ -58,8 +103,7 @@ function ServerPanel() {
       const result: ServerStartResp = await response.json();
 
       if (result.success && result.data) {
-        setStatus("Running at " + result.data.url);
-        setAddress(result.data.url);
+        handleFetch();
         toast.success("Server started successfully");
       } else {
         toast.error("Failed to start server");
@@ -88,10 +132,7 @@ function ServerPanel() {
       });
 
       const result: ServerStartResp = await response.json();
-
-      setStatus(`Stopped`);
-      setAddress("");
-
+      setServerStatus({ running: false, url: "" });
       toast.success("Server stopped successfully");
 
       return result;
@@ -109,19 +150,21 @@ function ServerPanel() {
         <Card>
           <CardHeader className="text-3xl -mb-5">{server?.name}</CardHeader>
           <CardContent>
-            <p className="text-xl">{address}</p>
+            <p className="text-xl">{serverStatus.url}</p>
             <p className="text-lg text-muted-foreground">
               {server?.type} {server?.version}
             </p>
             <div className="mt-4" />
-            <p className="text-lg">Status: {status}</p>
+            <p className="text-lg">
+              Status: {serverStatus.running ? "Running" : "Stopped"}
+            </p>
             <div className="mt-4" />
             <Button
               className="cursor-pointer"
-              onClick={status === "Stopped" ? handleStart : handleStop}
+              onClick={serverStatus.running ? handleStop : handleStart}
               disabled={isLoading}
             >
-              <Power /> {status === "Stopped" ? "Start Server" : "Stop Server"}
+              <Power /> {!serverStatus.running ? "Start Server" : "Stop Server"}
             </Button>
           </CardContent>
         </Card>

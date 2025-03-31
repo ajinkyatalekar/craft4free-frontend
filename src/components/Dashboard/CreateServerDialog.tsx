@@ -44,7 +44,7 @@ export function CreateServerCard({
       className="flex flex-col items-center justify-center h-full border-dashed cursor-pointer hover:bg-gray-800 transition-colors sm:bg-gray-900 sm:bg-[url(assets/background/caves.png)] bg-blend-overlay bg-cover"
       onClick={() => setCreateDialogOpen(true)}
     >
-      <CardContent className="flex flex-col items-center justify-center h-full">
+      <CardContent className="flex flex-col items-center justify-center h-full min-h-36">
         <div className="p-3 rounded-full bg-primary/10 mb-4">
           <Plus className="h-8 w-8 text-primary" />
         </div>
