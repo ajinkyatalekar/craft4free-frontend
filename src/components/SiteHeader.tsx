@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -74,6 +74,10 @@ export function SiteHeader({ activeTab }: { activeTab?: string }) {
                   className="relative h-8 w-8 rounded-full cursor-pointer"
                 >
                   <Avatar className="h-8 w-8">
+                    <AvatarImage
+                      src={user?.user_metadata?.avatar_url || null}
+                      alt={`${user?.email || "User"}'s profile`}
+                    />
                     <AvatarFallback>
                       {user?.email?.[0].toUpperCase() ?? "A"}
                     </AvatarFallback>
