@@ -2,18 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Tables } from "@/../database.types";
 import { useServer } from "@/context/ServerContext";
+import { CButton } from "@/components/CButton";
 import { useAuth } from "@/context/AuthContext";
 import { components } from "@/../api.types";
+import { useNavigate } from "react-router-dom";
+import { IconX } from "@tabler/icons-react";
 import { API_URL } from "@/utils/server";
-import { SiteHeader } from "@/components/SiteHeader";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Power } from "lucide-react";
-import { toast } from "sonner";
 
 type Server = Tables<"servers">;
-type ServerStartReq = components["schemas"]["ServerStartReq"];
-type ServerStartResp = components["schemas"]["ServerStartResp"];
 
 function ServerPanel() {
   const { server_id } = useParams();
@@ -22,9 +18,9 @@ function ServerPanel() {
 
   const { session } = useAuth();
 
-  const [status, setStatus] = useState("Stopped");
-  const [address, setAddress] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [status, setStatus] = useState("Stopped...");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!server_id) return;
@@ -41,10 +37,12 @@ function ServerPanel() {
     fetchServer();
   }, [server_id, getServer]);
 
+  type ServerStartReq = components["schemas"]["ServerStartReq"];
+  type ServerStartResp = components["schemas"]["ServerStartResp"];
+
   const handleStart = async () => {
     if (!server_id) return;
     const body: ServerStartReq = { server_id: server_id };
-    setIsLoading(true);
     try {
       const response = await fetch(`${API_URL}/server/${server_id}/start`, {
         method: "POST",
@@ -58,25 +56,24 @@ function ServerPanel() {
       const result: ServerStartResp = await response.json();
 
       if (result.success && result.data) {
-        setStatus("Running at " + result.data.url);
-        setAddress(result.data.url);
-        toast.success("Server started successfully");
+        console.log(result.data);
       } else {
-        toast.error("Failed to start server");
+        console.log(result.error?.message);
       }
+
+      setStatus(
+        `Running on ${result.data?.url} (It may take upto 2 minutes to start)`,
+      );
 
       return result;
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const handleStop = async () => {
     if (!server_id) return;
     const body: ServerStartReq = { server_id: server_id };
-    setIsLoading(true);
     try {
       const response = await fetch(`${API_URL}/server/${server_id}/stop`, {
         method: "POST",
@@ -89,44 +86,56 @@ function ServerPanel() {
 
       const result: ServerStartResp = await response.json();
 
-      setStatus(`Stopped`);
-      setAddress("");
-
-      toast.success("Server stopped successfully");
+      setStatus(`Stopped...`);
 
       return result;
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!server_id) return;
+    const body: ServerStartReq = { server_id: server_id };
+    try {
+      const response = await fetch(`${API_URL}/server/${server_id}/delete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      const result: ServerStartResp = await response.json();
+      navigate("/servers");
+      setStatus(`Stopped...`);
+
+      return result;
+    } catch (error) {
+      console.log(error);
     }
   };
 
   return (
-    <>
-      <SiteHeader />
-      <div className="mx-auto lg:mx-10 xl:mx-20 py-10 px-4">
-        <Card>
-          <CardHeader className="text-3xl -mb-5">{server?.name}</CardHeader>
-          <CardContent>
-            <p className="text-xl">{address}</p>
-            <p className="text-lg text-muted-foreground">
-              {server?.type} {server?.version}
-            </p>
-            <div className="mt-4" />
-            <p className="text-lg">Status: {status}</p>
-            <div className="mt-4" />
-            <Button
-              className="cursor-pointer"
-              onClick={status === "Stopped" ? handleStart : handleStop}
-              disabled={isLoading}
-            >
-              <Power /> {status === "Stopped" ? "Start Server" : "Stop Server"}
-            </Button>
-          </CardContent>
-        </Card>
+    <div className="flex flex-col gap-2 max-w-sm m-20">
+      <CButton onClick={() => navigate("/servers")}>
+        Go back to all servers
+      </CButton>
+      <div className="flex flex-row gap-2 items-center">
+        <p className="text-2xl">{server?.name}</p>
+        <IconX size={14} className="cursor-pointer" onClick={handleDelete} />
       </div>
-    </>
+      <p>
+        {server?.type} {server?.version}
+      </p>
+      <div className="flex flex-row gap-2">
+        <CButton onClick={handleStart}>Start</CButton>
+        <CButton onClick={handleStop}>Stop</CButton>
+      </div>
+
+      <p>Status: {status}</p>
+    </div>
   );
 }
 
