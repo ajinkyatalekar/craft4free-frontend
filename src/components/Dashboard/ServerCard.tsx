@@ -28,24 +28,24 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { MoreVertical, Trash, Copy } from "lucide-react";
-
-import { Tables } from "@/../database.types";
-type Server = Tables<"servers">;
+import { FullServer, Server } from "@/types/server";
+import { IconCopy } from "@tabler/icons-react";
+import { toast } from "sonner";
 
 export function ServerCard({
   server,
   handleCopyServer,
   handleDeleteServer,
 }: {
-  server: Server;
+  server: FullServer;
   handleCopyServer: (server: Server) => void;
   handleDeleteServer: (serverId: string, serverName: string) => void;
 }) {
   const navigate = useNavigate();
   return (
-    <Card key={server.id} className="overflow-hidden">
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-xl">{server.name}</CardTitle>
+    <Card key={server.server.id} className="overflow-hidden">
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-xl">{server.server.name}</CardTitle>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -58,7 +58,7 @@ export function ServerCard({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
-              onClick={() => handleCopyServer(server)}
+              onClick={() => handleCopyServer(server.server)}
               className="cursor-pointer"
               disabled
             >
@@ -79,8 +79,8 @@ export function ServerCard({
                 <AlertDialogHeader>
                   <AlertDialogTitle>Delete Server</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Are you sure you want to delete {server.name}? This action
-                    cannot be undone.
+                    Are you sure you want to delete {server.server.name}? This
+                    action cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -89,7 +89,9 @@ export function ServerCard({
                   </AlertDialogCancel>
                   <AlertDialogAction
                     className="cursor-pointer"
-                    onClick={() => handleDeleteServer(server.id, server.name)}
+                    onClick={() =>
+                      handleDeleteServer(server.server.id, server.server.name)
+                    }
                   >
                     Delete
                   </AlertDialogAction>
@@ -100,12 +102,32 @@ export function ServerCard({
         </DropdownMenu>
       </CardHeader>
       <CardContent>
+        <div className="-mt-4 text-md">
+          {server.running ? (
+            <div className="flex items-center gap-2">
+              <span className="text-green-400">Running at {server.url}</span>
+              <IconCopy
+                size={14}
+                className="cursor-pointer hover:text-gray-400 transition-colors -ml-1"
+                onClick={() => {
+                  navigator.clipboard.writeText(server.url);
+                  toast.success(
+                    `Server ${server.server.name}'s URL copied to clipboard`,
+                  );
+                }}
+              />
+            </div>
+          ) : (
+            <span className="text-red-400">Not Running</span>
+          )}
+        </div>
         <div className="flex flex-col gap-1 text-sm text-muted-foreground pt-2">
           <div className="flex items-center gap-2">
-            <span className="font-semibold">Type:</span> {server.type}
+            <span className="font-semibold">Type:</span> {server.server.type}
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-semibold">Version:</span> {server.version}
+            <span className="font-semibold">Version:</span>{" "}
+            {server.server.version}
           </div>
         </div>
       </CardContent>
@@ -113,7 +135,7 @@ export function ServerCard({
         <Button
           variant="outline"
           className="w-full cursor-pointer"
-          onClick={() => navigate(`/servers/${server.id}`)}
+          onClick={() => navigate(`/servers/${server.server.id}`)}
         >
           Manage Server
         </Button>

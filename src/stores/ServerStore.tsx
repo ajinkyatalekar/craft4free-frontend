@@ -1,24 +1,22 @@
 import { create } from "zustand";
 import supabase from "@/utils/supabase";
 
-import { Tables } from "@/../database.types";
 import { components } from "@/../api.types";
 import { API_URL } from "@/utils/server";
-
-type Server = Tables<"servers">;
+import { FullServer, Server } from "@/types/server";
 
 type ServerCreationReq = components["schemas"]["ServerCreationReq"];
 type ServerCreationResp = components["schemas"]["ServerCreationResp"];
 
 interface ServerState {
-  servers: Server[];
+  servers: FullServer[];
   isLoading: boolean;
   error: string | null;
   addServer: (
     serverData: ServerCreationReq,
     token: string,
   ) => Promise<ServerCreationResp>;
-  refreshServers: () => Promise<void>;
+  refreshServers: (token: string) => Promise<void>;
   getServer: (server_id: string) => Promise<Server | null>;
 }
 
@@ -68,17 +66,26 @@ const useServerStore = create<ServerState>((set) => ({
     }
   },
 
-  refreshServers: async () => {
+  refreshServers: async (token: string) => {
     set({ isLoading: true });
     try {
-      const { data, error } = await supabase.from("servers").select("*");
+      const response = await fetch(`${API_URL}/server`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      if (error) {
-        throw new Error(error.message);
+      const data = await response.json();
+      console.log(data);
+
+      if (!data.success) {
+        throw new Error(data.error);
       }
 
       set({
-        servers: data as Server[],
+        servers: data.data as FullServer[],
         isLoading: false,
         error: null,
       });
@@ -95,7 +102,6 @@ const useServerStore = create<ServerState>((set) => ({
   getServer: async (server_id: string) => {
     set({ isLoading: true });
     try {
-      // Access servers from the state, not from an undefined variable
       const { data, error } = await supabase
         .from("servers")
         .select("*")
@@ -115,7 +121,7 @@ const useServerStore = create<ServerState>((set) => ({
         isLoading: false,
         error: errorMessage,
       });
-      return null; // Make sure to return null for the error case
+      return null;
     }
   },
 }));

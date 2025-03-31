@@ -109,7 +109,7 @@ export function CreateServerDialog({
     );
 
     if (result.success) {
-      refreshServers();
+      refreshServers(session?.access_token || "");
       setCreateDialogOpen(false);
       setForm({
         name: "",

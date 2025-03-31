@@ -25,7 +25,8 @@ function Servers() {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   useEffect(() => {
-    refreshServers();
+    if (!session) return;
+    refreshServers(session.access_token);
   }, [refreshServers, session]);
 
   const handleDeleteServer = async (serverId: string, serverName: string) => {
@@ -45,7 +46,7 @@ function Servers() {
 
       console.log(result);
       if (result.data) {
-        refreshServers();
+        refreshServers(session?.access_token || "");
         toast.success("Server Deleted", {
           description: `${serverName} was successfully deleted.`,
         });
@@ -66,6 +67,30 @@ function Servers() {
     setCreateDialogOpen(true);
   };
 
+  const handleFetch = async () => {
+    try {
+      const response = await fetch(`${API_URL}/server`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+
+      const result = await response.json();
+      // console.log(result.success);
+
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (!session?.access_token) return;
+    handleFetch();
+  }, [session?.access_token]);
+
   return (
     <>
       <SiteHeader activeTab="Servers" />
@@ -76,7 +101,7 @@ function Servers() {
             variant="ghost"
             size="icon"
             onClick={() => {
-              refreshServers();
+              refreshServers(session?.access_token || "");
               toast("Servers refreshed");
             }}
             title="Refresh servers"
@@ -109,7 +134,7 @@ function Servers() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Server Cards */}
           {servers.map((server) => (
-            <div key={server.id}>
+            <div key={server.server.id}>
               <ServerCard
                 server={server}
                 handleCopyServer={handleCopyServer}
