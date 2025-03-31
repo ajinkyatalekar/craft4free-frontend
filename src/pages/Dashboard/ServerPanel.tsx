@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Tables } from "@/../database.types";
-import { useServer } from "@/context/ServerContext";
 import { useAuth } from "@/context/AuthContext";
 import { components } from "@/../api.types";
 import { API_URL } from "@/utils/server";
@@ -17,12 +16,10 @@ type ServerStartResp = components["schemas"]["ServerStartResp"];
 
 function ServerPanel() {
   const { server_id } = useParams();
-  const [server, setServer] = useState<Server | null>(null);
-  const { getServer } = useServer();
-
   const { session } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [server, setServer] = useState<Server | null>(null);
   const [serverStatus, setServerStatus] = useState({
     running: false,
     url: "",
@@ -43,7 +40,7 @@ function ServerPanel() {
       });
 
       const result = await response.json();
-
+      setServer(result.data.server);
       if (result.data.running) {
         setServerStatus({
           running: result.data.running,
@@ -56,8 +53,6 @@ function ServerPanel() {
         });
       }
 
-      console.log("Server status fetched:", result);
-
       return result;
     } catch (error) {
       console.log(error);
@@ -67,24 +62,9 @@ function ServerPanel() {
   };
 
   useEffect(() => {
-    if (!server_id) return;
-
-    const fetchServer = async () => {
-      try {
-        const serverData = await getServer(server_id);
-        setServer(serverData);
-      } catch (error) {
-        console.error("Error fetching server:", error);
-      }
-    };
-
-    fetchServer();
-  }, [server_id, getServer]);
-
-  useEffect(() => {
     if (!server_id || !session?.access_token) return;
     handleFetch();
-  }, [server_id, session?.access_token]);
+  }, [session?.access_token]);
 
   const handleStart = async () => {
     if (!server_id) return;
@@ -156,7 +136,10 @@ function ServerPanel() {
             </p>
             <div className="mt-4" />
             <p className="text-lg">
-              Status: {serverStatus.running ? "Running" : "Stopped"}
+              Status:{" "}
+              {serverStatus.running
+                ? `Running! Connect at ${serverStatus.url}`
+                : "Stopped"}
             </p>
             <div className="mt-4" />
             <Button
