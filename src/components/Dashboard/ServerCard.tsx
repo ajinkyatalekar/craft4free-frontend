@@ -29,8 +29,7 @@ import {
 
 import { MoreVertical, Trash, Copy } from "lucide-react";
 import { FullServer, Server } from "@/types/server";
-import { IconCopy } from "@tabler/icons-react";
-import { toast } from "sonner";
+import { ServerStatus } from "./ServerStatus";
 
 export function ServerCard({
   server,
@@ -102,25 +101,7 @@ export function ServerCard({
         </DropdownMenu>
       </CardHeader>
       <CardContent>
-        <div className="-mt-4 text-md">
-          {server.running ? (
-            <div className="flex items-center gap-2">
-              <span className="text-green-400">Running at {server.url}</span>
-              <IconCopy
-                size={14}
-                className="cursor-pointer hover:text-gray-400 transition-colors -ml-1"
-                onClick={() => {
-                  navigator.clipboard.writeText(server.url);
-                  toast.success(
-                    `Server ${server.server.name}'s URL copied to clipboard`,
-                  );
-                }}
-              />
-            </div>
-          ) : (
-            <span className="text-red-400">Not Running</span>
-          )}
-        </div>
+        <ServerStatus server={server} styles="-mt-4 text-md" />
         <div className="flex flex-col gap-1 text-sm text-muted-foreground pt-2">
           <div className="flex items-center gap-2">
             <span className="font-semibold">Type:</span> {server.server.type}
