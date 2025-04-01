@@ -25,9 +25,16 @@ function Servers() {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   useEffect(() => {
-    if (!session) return;
-    refreshServers(session.access_token);
-  }, [refreshServers, session]);
+    const loop = async () => {
+      if (!session) return;
+      await refreshServers(session.access_token);
+      // setTimeout(() => {
+      //   loop();
+      // }, 10000);
+    };
+
+    loop();
+  }, [session]);
 
   const handleDeleteServer = async (serverId: string, serverName: string) => {
     if (!serverId) return;

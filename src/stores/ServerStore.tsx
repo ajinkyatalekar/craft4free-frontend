@@ -78,7 +78,6 @@ const useServerStore = create<ServerState>((set) => ({
       });
 
       const data = await response.json();
-      console.log(data);
 
       if (!data.success) {
         throw new Error(data.error);
