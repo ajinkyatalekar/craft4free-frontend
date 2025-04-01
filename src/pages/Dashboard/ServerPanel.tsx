@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { FullServer } from "@/types/server";
 import { ServerStatus } from "@/components/Dashboard/ServerStatus";
 import { Skeleton } from "@/components/ui/skeleton";
+import Console from "@/components/Dashboard/Console";
 
 type ServerStartReq = components["schemas"]["ServerStartReq"];
 type ServerStartResp = components["schemas"]["ServerStartResp"];
@@ -165,6 +166,14 @@ function ServerPanel() {
           <>
             <Skeleton className="h-50 w-full" />
           </>
+        )}
+
+        <div className="mt-4" />
+        {server?.server.id && (
+          <Console
+            serverId={server?.server.id}
+            stopped={server?.status.status === "stopped"}
+          />
         )}
       </div>
     </>
