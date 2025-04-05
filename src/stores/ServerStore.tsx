@@ -31,7 +31,7 @@ const useServerStore = create<ServerState>((set) => ({
   create_server: async (body: ServerCreateRequest, token: string) => {
     set({ isLoading: true });
     try {
-      const response = await fetch(`${API_URL}/new/servers`, {
+      const response = await fetch(`${API_URL}/servers`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,7 +66,7 @@ const useServerStore = create<ServerState>((set) => ({
 
   fetch_server: async (server_id: string, token: string) => {
     try {
-      const response = await fetch(`${API_URL}/new/servers/${server_id}`, {
+      const response = await fetch(`${API_URL}/servers/${server_id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -90,7 +90,7 @@ const useServerStore = create<ServerState>((set) => ({
   refresh_servers: async (token: string) => {
     set({ isLoading: true });
     try {
-      const response = await fetch(`${API_URL}/new/servers`, {
+      const response = await fetch(`${API_URL}/servers`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -118,7 +118,7 @@ const useServerStore = create<ServerState>((set) => ({
   stop_server: async (server_id: string, token: string) => {
     set({ isLoading: true });
     try {
-      const response = await fetch(`${API_URL}/new/servers/${server_id}/stop`, {
+      const response = await fetch(`${API_URL}/servers/${server_id}/stop`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -141,17 +141,14 @@ const useServerStore = create<ServerState>((set) => ({
   start_server: async (server_id: string, token: string) => {
     set({ isLoading: true });
     try {
-      const response = await fetch(
-        `${API_URL}/new/servers/${server_id}/start`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ server_id: server_id }),
+      const response = await fetch(`${API_URL}/servers/${server_id}/start`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify({ server_id: server_id }),
+      });
 
       const result: StandardResponse = await response.json();
 
@@ -167,16 +164,13 @@ const useServerStore = create<ServerState>((set) => ({
   delete_server: async (server_id: string, token: string) => {
     set({ isLoading: true });
     try {
-      const response = await fetch(
-        `${API_URL}/new/servers/${server_id}/delete`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await fetch(`${API_URL}/servers/${server_id}/delete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       const result: StandardResponse = await response.json();
 

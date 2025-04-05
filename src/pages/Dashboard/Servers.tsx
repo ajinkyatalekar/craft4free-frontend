@@ -55,7 +55,7 @@ function Servers() {
 
   const handleFetch = async () => {
     try {
-      const response = await fetch(`${API_URL}/new/servers`, {
+      const response = await fetch(`${API_URL}/servers`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
