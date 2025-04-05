@@ -38,7 +38,7 @@ export function ServerCard({
 }: {
   server: FullServer;
   handleCopyServer: (server: Server) => void;
-  handleDeleteServer: (serverId: string, serverName: string) => void;
+  handleDeleteServer: (server_id: string) => void;
 }) {
   const navigate = useNavigate();
   return (
@@ -88,9 +88,7 @@ export function ServerCard({
                   </AlertDialogCancel>
                   <AlertDialogAction
                     className="cursor-pointer"
-                    onClick={() =>
-                      handleDeleteServer(server.server.id, server.server.name)
-                    }
+                    onClick={() => handleDeleteServer(server.server.id)}
                   >
                     Delete
                   </AlertDialogAction>

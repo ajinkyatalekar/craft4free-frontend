@@ -1,23 +1,26 @@
 import { create } from "zustand";
-import supabase from "@/utils/supabase";
 
 import { components } from "@/../api.types";
 import { API_URL } from "@/utils/server";
-import { FullServer, Server } from "@/types/server";
+import { FullServer, StandardResponse } from "@/types/server";
 
-type ServerCreationReq = components["schemas"]["ServerCreationReq"];
-type ServerCreationResp = components["schemas"]["ServerCreationResp"];
+type ServerCreateRequest = components["schemas"]["ServerCreateRequest"];
 
 interface ServerState {
   servers: FullServer[];
   isLoading: boolean;
-  error: string | null;
-  addServer: (
-    serverData: ServerCreationReq,
+  create_server: (
+    body: ServerCreateRequest,
     token: string,
-  ) => Promise<ServerCreationResp>;
-  refreshServers: (token: string) => Promise<void>;
-  getServer: (server_id: string) => Promise<Server | null>;
+  ) => Promise<StandardResponse>;
+  refresh_servers: (token: string) => Promise<void>;
+  fetch_server: (server_id: string, token: string) => Promise<StandardResponse>;
+  delete_server: (
+    server_id: string,
+    token: string,
+  ) => Promise<StandardResponse>;
+  start_server: (server_id: string, token: string) => Promise<StandardResponse>;
+  stop_server: (server_id: string, token: string) => Promise<StandardResponse>;
 }
 
 const useServerStore = create<ServerState>((set) => ({
@@ -25,29 +28,27 @@ const useServerStore = create<ServerState>((set) => ({
   isLoading: false,
   error: null,
 
-  addServer: async (serverData: ServerCreationReq, token: string) => {
+  create_server: async (body: ServerCreateRequest, token: string) => {
     set({ isLoading: true });
     try {
-      const response = await fetch(`${API_URL}/server`, {
+      const response = await fetch(`${API_URL}/new/servers`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(serverData),
+        body: JSON.stringify(body),
       });
 
-      const result: ServerCreationResp = await response.json();
+      const result: StandardResponse = await response.json();
 
       if (result.success && result.data) {
         set({
           isLoading: false,
-          error: "",
         });
       } else {
         set({
           isLoading: false,
-          error: result.error?.message || "Unknown error occurred",
         });
       }
 
@@ -55,21 +56,41 @@ const useServerStore = create<ServerState>((set) => ({
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Failed to create server";
-      set({ isLoading: false, error: errorMessage });
+      set({ isLoading: false });
       return {
         success: false,
-        error: {
-          type: "NETWORK_ERROR",
-          message: errorMessage,
-        },
+        error: errorMessage,
       };
     }
   },
 
-  refreshServers: async (token: string) => {
+  fetch_server: async (server_id: string, token: string) => {
+    try {
+      const response = await fetch(`${API_URL}/new/servers/${server_id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ server_id: server_id }),
+      });
+
+      const result: StandardResponse = await response.json();
+
+      return result;
+    } catch (error) {
+      return {
+        success: false,
+        error:
+          error instanceof Error ? error.message : "Failed to fetch server",
+      };
+    }
+  },
+
+  refresh_servers: async (token: string) => {
     set({ isLoading: true });
     try {
-      const response = await fetch(`${API_URL}/server`, {
+      const response = await fetch(`${API_URL}/new/servers`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -77,50 +98,107 @@ const useServerStore = create<ServerState>((set) => ({
         },
       });
 
-      const data = await response.json();
+      const result: StandardResponse = await response.json();
 
-      if (!data.success) {
-        throw new Error(data.error);
+      if (!result.success) {
+        throw new Error(result.error);
       }
 
       set({
-        servers: data.data as FullServer[],
+        servers: result.data as FullServer[],
         isLoading: false,
-        error: null,
       });
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Failed to refresh servers";
+    } catch {
       set({
         isLoading: false,
-        error: errorMessage,
       });
     }
   },
 
-  getServer: async (server_id: string) => {
+  stop_server: async (server_id: string, token: string) => {
     set({ isLoading: true });
     try {
-      const { data, error } = await supabase
-        .from("servers")
-        .select("*")
-        .eq("id", server_id)
-        .single();
+      const response = await fetch(`${API_URL}/new/servers/${server_id}/stop`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ server_id: server_id }),
+      });
 
-      if (error) {
-        throw new Error(error.message);
+      const result: StandardResponse = await response.json();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+      return { success: false, error: "Unknown error occured" };
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  start_server: async (server_id: string, token: string) => {
+    set({ isLoading: true });
+    try {
+      const response = await fetch(
+        `${API_URL}/new/servers/${server_id}/start`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ server_id: server_id }),
+        },
+      );
+
+      const result: StandardResponse = await response.json();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+      return { success: false, error: "Unknown error occured" };
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  delete_server: async (server_id: string, token: string) => {
+    set({ isLoading: true });
+    try {
+      const response = await fetch(
+        `${API_URL}/new/servers/${server_id}/delete`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const result: StandardResponse = await response.json();
+
+      if (result.success && result.data) {
+        set({
+          isLoading: false,
+        });
+      } else {
+        set({
+          isLoading: false,
+        });
       }
 
-      set({ isLoading: false, error: null });
-      return data as Server;
+      return result;
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Failed to get server";
-      set({
-        isLoading: false,
+        error instanceof Error ? error.message : "Failed to delete server";
+      set({ isLoading: false });
+      return {
+        success: false,
         error: errorMessage,
-      });
-      return null;
+      };
     }
   },
 }));

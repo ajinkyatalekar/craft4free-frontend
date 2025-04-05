@@ -61,7 +61,7 @@ export function CreateServerDialog({
   createDialogOpen: boolean;
   setCreateDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const { refreshServers, addServer } = useServerStore();
+  const { refresh_servers, create_server } = useServerStore();
   const { session } = useAuth();
 
   const [form, setForm] = useState({
@@ -99,7 +99,7 @@ export function CreateServerDialog({
       return;
     }
 
-    const result = await addServer(
+    const result = await create_server(
       {
         name: form.name,
         type: form.type,
@@ -109,7 +109,7 @@ export function CreateServerDialog({
     );
 
     if (result.success) {
-      refreshServers(session?.access_token || "");
+      refresh_servers(session?.access_token || "");
       setCreateDialogOpen(false);
       setForm({
         name: "",
@@ -121,7 +121,7 @@ export function CreateServerDialog({
       });
     } else {
       toast.error("Error Creating Server", {
-        description: result.error?.message || "An unknown error occurred",
+        description: result.error || "An unknown error occurred",
       });
     }
   };

@@ -9,25 +9,22 @@ import { RefreshCcw, Plus, Server } from "lucide-react";
 
 import { Tables } from "@/../database.types";
 import { API_URL } from "@/utils/server";
-import { components } from "@/../api.types";
 import {
   CreateServerCard,
   CreateServerDialog,
 } from "@/components/Dashboard/CreateServerDialog";
 import { ServerCard } from "@/components/Dashboard/ServerCard";
 type Server = Tables<"servers">;
-type ServerStartReq = components["schemas"]["ServerStartReq"];
-type ServerStartResp = components["schemas"]["ServerStartResp"];
 
 function Servers() {
   const { session } = useAuth();
-  const { servers, refreshServers } = useServerStore();
+  const { servers, refresh_servers, delete_server } = useServerStore();
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   useEffect(() => {
     const loop = async () => {
       if (!session) return;
-      await refreshServers(session.access_token);
+      await refresh_servers(session.access_token);
       // setTimeout(() => {
       //   loop();
       // }, 10000);
@@ -36,36 +33,18 @@ function Servers() {
     loop();
   }, [session]);
 
-  const handleDeleteServer = async (serverId: string, serverName: string) => {
-    if (!serverId) return;
-    const body: ServerStartReq = { server_id: serverId };
-    try {
-      const response = await fetch(`${API_URL}/server/${serverId}/delete`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-        body: JSON.stringify(body),
+  const handleDeleteServer = async (server_id: string) => {
+    const result = await delete_server(server_id, session?.access_token || "");
+
+    if (result.success) {
+      toast.success("Server Deleted", {
+        description: `Server was successfully deleted.`,
       });
-
-      const result: ServerStartResp = await response.json();
-
-      console.log(result);
-      if (result.data) {
-        refreshServers(session?.access_token || "");
-        toast.success("Server Deleted", {
-          description: `${serverName} was successfully deleted.`,
-        });
-      } else {
-        toast.error("Error Deleting Server", {
-          description: result.error?.message || "An unknown error occurred",
-        });
-      }
-
-      return result;
-    } catch (error) {
-      console.log(error);
+      refresh_servers(session?.access_token || "");
+    } else {
+      toast.error("Error Deleting Server", {
+        description: result.error || "An unknown error occurred",
+      });
     }
   };
 
@@ -76,7 +55,7 @@ function Servers() {
 
   const handleFetch = async () => {
     try {
-      const response = await fetch(`${API_URL}/server`, {
+      const response = await fetch(`${API_URL}/new/servers`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -108,7 +87,7 @@ function Servers() {
             variant="ghost"
             size="icon"
             onClick={() => {
-              refreshServers(session?.access_token || "");
+              refresh_servers(session?.access_token || "");
               toast("Servers refreshed");
             }}
             title="Refresh servers"
