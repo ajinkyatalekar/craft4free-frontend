@@ -12,3 +12,9 @@ type ServerStatus = {
   port: string;
   url: string;
 };
+
+export type StandardResponse = {
+  success: boolean;
+  data?: unknown;
+  error?: string;
+};

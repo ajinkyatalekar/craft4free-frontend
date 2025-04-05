@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import { components } from "@/../api.types";
-import { API_URL } from "@/utils/server";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,37 +11,24 @@ import { ServerStatus } from "@/components/Dashboard/ServerStatus";
 import { Skeleton } from "@/components/ui/skeleton";
 import Console from "@/components/Dashboard/Console";
 
-type ServerStartReq = components["schemas"]["ServerStartReq"];
-type ServerStartResp = components["schemas"]["ServerStartResp"];
+import useServerStore from "@/stores/ServerStore";
 
 function ServerPanel() {
   const { server_id } = useParams();
   const { session } = useAuth();
+  const { fetch_server, start_server, stop_server } = useServerStore();
 
   const [isLoading, setIsLoading] = useState(false);
   const [server, setServer] = useState<FullServer | null>(null);
 
   const handleFetch = async () => {
     if (!server_id) return;
-    const body: ServerStartReq = { server_id: server_id };
-    try {
-      const response = await fetch(`${API_URL}/server/${server_id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-        body: JSON.stringify(body),
-      });
 
-      const result = await response.json();
-      if (result.success) {
-        setServer(result.data);
-      }
-
-      return result;
-    } catch (error) {
-      console.log(error);
+    const response = await fetch_server(server_id, session?.access_token || "");
+    if (response.success) {
+      setServer(response.data as FullServer);
+    } else {
+      toast.error(response.error);
     }
   };
 
@@ -61,61 +46,34 @@ function ServerPanel() {
 
   const handleStart = async () => {
     if (!server_id) return;
-    const body: ServerStartReq = { server_id: server_id };
     setIsLoading(true);
-    try {
-      const response = await fetch(`${API_URL}/server/${server_id}/start`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-        body: JSON.stringify(body),
-      });
 
-      const result: ServerStartResp = await response.json();
+    const result = await start_server(server_id, session?.access_token || "");
 
-      if (result.success && result.data) {
-        await handleFetch();
-        toast.success("Server started successfully");
-      } else {
-        toast.error("Failed to start server");
-      }
-
-      return result;
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
+    if (result.success) {
+      await handleFetch();
+      toast.success("Server started successfully");
+    } else {
+      toast.error(result.error);
     }
+
+    setIsLoading(false);
   };
 
   const handleStop = async () => {
     if (!server_id) return;
-    const body: ServerStartReq = { server_id: server_id };
     setIsLoading(true);
-    try {
-      const response = await fetch(`${API_URL}/server/${server_id}/stop`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-        body: JSON.stringify(body),
-      });
 
-      const result: ServerStartResp = await response.json();
+    const result = await stop_server(server_id, session?.access_token || "");
 
+    if (result.success) {
       await handleFetch();
-
       toast.success("Server stopped successfully");
-
-      return result;
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
+    } else {
+      toast.error(result.error);
     }
+
+    setIsLoading(false);
   };
 
   return (
