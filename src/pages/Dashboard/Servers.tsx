@@ -34,7 +34,10 @@ function Servers() {
   }, [session]);
 
   const handleDeleteServer = async (server_id: string) => {
-    const result = await delete_server(server_id, session?.access_token || "");
+    const result = await delete_server(
+      server_id,
+      session?.access_token || "null",
+    );
 
     if (result.success) {
       toast.success("Server Deleted", {
