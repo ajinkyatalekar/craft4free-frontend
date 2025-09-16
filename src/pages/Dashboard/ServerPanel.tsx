@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Console from "@/components/Dashboard/Console";
 
 import useServerStore from "@/stores/ServerStore";
+import HelpPanel from "@/components/Dashboard/HelpPanel";
 
 function ServerPanel() {
   const { server_id } = useParams();
@@ -133,6 +134,9 @@ function ServerPanel() {
             stopped={server?.status.status === "stopped"}
           />
         )}
+
+        <div className="mt-4" />
+        <HelpPanel server={server} />
       </div>
     </>
   );

@@ -15,6 +15,7 @@ const Console: React.FC<ServerLogsProps> = ({ serverId, stopped }) => {
   const [serverRunning, setServerRunning] = useState<boolean>(true);
   const socketRef = useRef<WebSocket | null>(null);
   const logsEndRef = useRef<HTMLDivElement>(null);
+  const consoleContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Create WebSocket connection if not stopped
@@ -53,8 +54,9 @@ const Console: React.FC<ServerLogsProps> = ({ serverId, stopped }) => {
 
   // Auto-scroll to bottom when new logs arrive
   useEffect(() => {
-    if (logsEndRef.current) {
-      logsEndRef.current.scrollIntoView({ behavior: "smooth" });
+    if (consoleContainerRef.current) {
+      consoleContainerRef.current.scrollTop =
+        consoleContainerRef.current.scrollHeight;
     }
   }, [logs]);
 
@@ -103,6 +105,7 @@ const Console: React.FC<ServerLogsProps> = ({ serverId, stopped }) => {
 
       <CardContent className="p-0">
         <div
+          ref={consoleContainerRef}
           className="h-96 border-y border-gray-800/50
           overflow-x-hidden overflow-y-auto
           [&::-webkit-scrollbar]:w-2
