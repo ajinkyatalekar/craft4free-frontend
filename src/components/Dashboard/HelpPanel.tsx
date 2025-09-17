@@ -1,12 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
-import {
-  Copy,
-  Gamepad2,
-  Server,
-  Users,
-  Wifi,
-} from "lucide-react";
+import { Copy, Gamepad2, Server, Users, Wifi } from "lucide-react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { FullServer } from "@/types/server";
@@ -139,12 +133,7 @@ const HelpPanel = ({ server }: HelpPanelProps) => {
                 <p className="text-sm text-muted-foreground mb-2">
                   From the main menu, click "Multiplayer"
                 </p>
-                <div className="bg-muted/50 p-3 rounded text-center">
-                  <img
-                    src="/src/assets/dashboard/help/step_3b.jpg"
-                    alt="Minecraft main menu showing Multiplayer button"
-                    className="max-w-full h-auto rounded border"
-                  />
+                <div className="p-3 rounded text-center bg-[url(assets/dashboard/help/step_3b.jpg)] bg-cover bg-center bg-no-repeat h-160">
                 </div>
               </div>
             </div>
@@ -159,12 +148,7 @@ const HelpPanel = ({ server }: HelpPanelProps) => {
                 <p className="text-sm text-muted-foreground mb-2">
                   Click "Add Server"
                 </p>
-                <div className="bg-muted/50 p-3 rounded text-center">
-                  <img
-                    src="/src/assets/dashboard/help/step_3c.jpg"
-                    alt="Multiplayer screen showing Add Server button"
-                    className="max-w-full h-auto rounded border"
-                  />
+                  <div className="p-3 rounded text-center bg-[url(assets/dashboard/help/step_3c.jpg)] bg-cover bg-center bg-no-repeat h-160">
                 </div>
               </div>
             </div>
@@ -179,13 +163,8 @@ const HelpPanel = ({ server }: HelpPanelProps) => {
                 <p className="text-sm text-muted-foreground mb-2">
                   Enter the server address from Step 2 and click "Done"
                 </p>
-                <div className="bg-muted/50 p-3 rounded text-center text-sm text-muted-foreground mt-2">
-                  <img
-                    src="/src/assets/dashboard/help/step_3d.png"
-                    alt="Add Server dialog with fields filled"
-                    className="max-w-full h-auto rounded border"
-                  />
-                </div>
+                  <div className="p-3 rounded text-center bg-[url(assets/dashboard/help/step_3d.png)] bg-cover bg-center bg-no-repeat h-160">
+                  </div>
               </div>
             </div>
 
@@ -199,12 +178,7 @@ const HelpPanel = ({ server }: HelpPanelProps) => {
                 <p className="text-sm text-muted-foreground mb-2">
                   Select your server and click "Join Server"
                 </p>
-                <div className="bg-muted/50 p-3 rounded text-center text-sm text-muted-foreground">
-                  <img
-                    src="/src/assets/dashboard/help/step_3e.jpg"
-                    alt="Server list showing the new server with green ping"
-                    className="max-w-full h-auto rounded border"
-                  />
+                  <div className="p-3 rounded text-center bg-[url(assets/dashboard/help/step_3e.jpg)] bg-cover bg-center bg-no-repeat h-160">
                 </div>
               </div>
             </div>
