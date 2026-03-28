@@ -1,18 +1,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { Copy, Gamepad2, Server, Users, Wifi } from "lucide-react";
+import { Copy, Gamepad2, Users, Wifi } from "lucide-react";
+import { Server as ServerIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
-import { FullServer } from "@/types/server";
+import { Server } from "@/types/server";
 
 interface HelpPanelProps {
-  server: FullServer | null;
+  server: Server | null;
 }
 
 const HelpPanel = ({ server }: HelpPanelProps) => {
   const handleCopyConnectionInfo = () => {
-    if (server?.status.url && server?.status.port) {
-      const connectionString = `${server.status.url}:${server.status.port}`;
+    if (server?.ip) {
+      const connectionString = server.ip;
       navigator.clipboard.writeText(connectionString);
       toast.success("URL copied to clipboard");
     } else {
@@ -22,14 +23,14 @@ const HelpPanel = ({ server }: HelpPanelProps) => {
 
   const getServerStatus = () => {
     if (!server) return "Unknown";
-    return server.status.status;
+    return server.status;
   };
 
   const getConnectionString = () => {
-    if (!server?.status.url || !server?.status.port) {
+    if (!server?.ip) {
       return "Server connection info will appear when server is running";
     }
-    return `${server.status.url}:${server.status.port}`;
+    return server.ip;
   };
 
   return (
@@ -44,7 +45,7 @@ const HelpPanel = ({ server }: HelpPanelProps) => {
         {/* Server Status Check */}
         <div className="bg-muted/50 p-4 rounded-lg">
           <h3 className="font-semibold mb-2 flex items-center gap-2">
-            <Server className="h-4 w-4" />
+            <ServerIcon className="h-4 w-4" />
             Step 1: Check Server Status
           </h3>
           <p className="text-sm text-muted-foreground mb-3">
@@ -77,7 +78,7 @@ const HelpPanel = ({ server }: HelpPanelProps) => {
               <span>
                 <span
                   className={
-                    server?.status.url && server?.status.port
+                    server?.ip
                       ? "text-foreground"
                       : "text-muted-foreground"
                   }
@@ -89,7 +90,7 @@ const HelpPanel = ({ server }: HelpPanelProps) => {
                 variant="ghost"
                 size="sm"
                 onClick={handleCopyConnectionInfo}
-                disabled={!server?.status.url || !server?.status.port}
+                disabled={!server?.ip}
               >
                 <Copy className="h-3 w-3" />
               </Button>

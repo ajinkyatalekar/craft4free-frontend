@@ -2,12 +2,12 @@ import { create } from "zustand";
 
 import { components } from "@/../api.types";
 import { API_URL } from "@/utils/server";
-import { FullServer, StandardResponse } from "@/types/server";
+import { Server, StandardResponse } from "@/types/server";
 
 type ServerCreateRequest = components["schemas"]["ServerCreateRequest"];
 
 interface ServerState {
-  servers: FullServer[];
+  servers: Server[];
   isLoading: boolean;
   create_server: (
     body: ServerCreateRequest,
@@ -31,7 +31,7 @@ const useServerStore = create<ServerState>((set) => ({
   create_server: async (body: ServerCreateRequest, token: string) => {
     set({ isLoading: true });
     try {
-      const response = await fetch(`${API_URL}/servers`, {
+      const response = await fetch(`${API_URL}/api/servers`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,17 +66,17 @@ const useServerStore = create<ServerState>((set) => ({
 
   fetch_server: async (server_id: string, token: string) => {
     try {
-      const response = await fetch(`${API_URL}/servers/${server_id}`, {
-        method: "POST",
+      const response = await fetch(`${API_URL}/api/servers/${server_id}`, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ server_id: server_id }),
+        // body: JSON.stringify({ server_id: server_id }),
       });
 
       const result: StandardResponse = await response.json();
-
+      console.log(result);
       return result;
     } catch (error) {
       return {
@@ -90,7 +90,7 @@ const useServerStore = create<ServerState>((set) => ({
   refresh_servers: async (token: string) => {
     set({ isLoading: true });
     try {
-      const response = await fetch(`${API_URL}/servers`, {
+      const response = await fetch(`${API_URL}/api/servers`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -99,13 +99,12 @@ const useServerStore = create<ServerState>((set) => ({
       });
 
       const result: StandardResponse = await response.json();
-
       if (!result.success) {
         throw new Error(result.error);
       }
 
       set({
-        servers: result.data as FullServer[],
+        servers: result.data as Server[],
         isLoading: false,
       });
     } catch {
@@ -118,7 +117,7 @@ const useServerStore = create<ServerState>((set) => ({
   stop_server: async (server_id: string, token: string) => {
     set({ isLoading: true });
     try {
-      const response = await fetch(`${API_URL}/servers/${server_id}/stop`, {
+      const response = await fetch(`${API_URL}/api/servers/${server_id}/stop`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -141,7 +140,7 @@ const useServerStore = create<ServerState>((set) => ({
   start_server: async (server_id: string, token: string) => {
     set({ isLoading: true });
     try {
-      const response = await fetch(`${API_URL}/servers/${server_id}/start`, {
+      const response = await fetch(`${API_URL}/api/servers/${server_id}/start`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { MoreVertical, Trash, Copy } from "lucide-react";
-import { FullServer, Server } from "@/types/server";
+import { Server } from "@/types/server";
 import { ServerStatus } from "./ServerStatus";
 
 export function ServerCard({
@@ -36,15 +36,15 @@ export function ServerCard({
   handleCopyServer,
   handleDeleteServer,
 }: {
-  server: FullServer;
+  server: Server;
   handleCopyServer: (server: Server) => void;
   handleDeleteServer: (server_id: string) => void;
 }) {
   const navigate = useNavigate();
   return (
-    <Card key={server.server.id} className="overflow-hidden">
+    <Card key={server.id} className="overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-xl">{server.server.name}</CardTitle>
+        <CardTitle className="text-xl">{server.name}</CardTitle>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -57,7 +57,7 @@ export function ServerCard({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
-              onClick={() => handleCopyServer(server.server)}
+              onClick={() => handleCopyServer(server)}
               className="cursor-pointer"
               disabled
             >
@@ -78,7 +78,7 @@ export function ServerCard({
                 <AlertDialogHeader>
                   <AlertDialogTitle>Delete Server</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Are you sure you want to delete {server.server.name}? This
+                    Are you sure you want to delete {server.name}? This
                     action cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
@@ -88,7 +88,7 @@ export function ServerCard({
                   </AlertDialogCancel>
                   <AlertDialogAction
                     className="cursor-pointer"
-                    onClick={() => handleDeleteServer(server.server.id)}
+                    onClick={() => handleDeleteServer(server.id)}
                   >
                     Delete
                   </AlertDialogAction>
@@ -102,11 +102,11 @@ export function ServerCard({
         <ServerStatus server={server} styles="-mt-4 text-md" />
         <div className="flex flex-col gap-1 text-sm text-muted-foreground pt-2">
           <div className="flex items-center gap-2">
-            <span className="font-semibold">Type:</span> {server.server.type}
+            <span className="font-semibold">Type:</span> {server.type}
           </div>
           <div className="flex items-center gap-2">
             <span className="font-semibold">Version:</span>{" "}
-            {server.server.version}
+            {server.version}
           </div>
         </div>
       </CardContent>
@@ -114,7 +114,7 @@ export function ServerCard({
         <Button
           variant="outline"
           className="w-full cursor-pointer"
-          onClick={() => navigate(`/servers/${server.server.id}`)}
+          onClick={() => navigate(`/servers/${server.id}`)}
         >
           Manage Server
         </Button>

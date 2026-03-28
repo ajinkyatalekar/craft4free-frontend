@@ -1,6 +1,6 @@
 export const API_URL = import.meta.env.PROD
-  ? "https://api.craft4free.online"
-  : "https://api.craft4free.online";
+  ? "https://api.craft4free.com"
+  : "https://api.craft4free.com";
 
 export const SERVER_DATA = {
   PAPER: {

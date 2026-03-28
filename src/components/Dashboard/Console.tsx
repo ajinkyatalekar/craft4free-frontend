@@ -25,7 +25,9 @@ const Console: React.FC<ServerLogsProps> = ({ serverId, stopped }) => {
       return;
     }
 
-    const ws = new WebSocket(`${API_URL}/ws/console/${serverId}`);
+    // Convert http:// to ws:// for WebSocket connection
+    const wsUrl = API_URL.replace(/^http/, "ws");
+    const ws = new WebSocket(`${wsUrl}/ws/console/${serverId}`);
     socketRef.current = ws;
 
     ws.onopen = () => {

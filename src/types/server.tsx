@@ -1,20 +1,21 @@
-import { Tables } from "@/../database.types";
-
-export type Server = Tables<"servers">;
-export type FullServer = {
-  server: Server;
+export type Server = {
+  id: string;
+  user_id: string;
+  name: string;
+  type: string;
+  version: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+  ip: string;
   status: ServerStatus;
-};
-
-type ServerStatus = {
-  error: string;
-  status: string;
-  port: string;
-  url: string;
-};
+  worker_id: string;
+}
 
 export type StandardResponse = {
   success: boolean;
   data?: unknown;
   error?: string;
 };
+
+type ServerStatus = "scheduled" | "running" | "stopped" | "starting";

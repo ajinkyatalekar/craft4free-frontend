@@ -58,7 +58,7 @@ function Servers() {
 
   const handleFetch = async () => {
     try {
-      const response = await fetch(`${API_URL}/servers`, {
+      const response = await fetch(`${API_URL}/api/servers`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -123,7 +123,7 @@ function Servers() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Server Cards */}
           {servers.map((server) => (
-            <div key={server.server.id}>
+            <div key={server.id}>
               <ServerCard
                 server={server}
                 handleCopyServer={handleCopyServer}

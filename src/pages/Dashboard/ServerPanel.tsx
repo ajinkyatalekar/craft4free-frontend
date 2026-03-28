@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Power, RefreshCcw } from "lucide-react";
 import { toast } from "sonner";
-import { FullServer } from "@/types/server";
+import { Server } from "@/types/server";
 import { ServerStatus } from "@/components/Dashboard/ServerStatus";
 import { Skeleton } from "@/components/ui/skeleton";
 import Console from "@/components/Dashboard/Console";
@@ -20,14 +20,14 @@ function ServerPanel() {
   const { fetch_server, start_server, stop_server } = useServerStore();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [server, setServer] = useState<FullServer | null>(null);
+  const [server, setServer] = useState<Server | null>(null);
 
   const handleFetch = async () => {
     if (!server_id) return;
 
     const response = await fetch_server(server_id, session?.access_token || "");
     if (response.success) {
-      setServer(response.data as FullServer);
+      setServer(response.data as Server);
     } else {
       toast.error(response.error);
     }
@@ -85,7 +85,7 @@ function ServerPanel() {
           <Card>
             <CardHeader className="text-3xl -mb-6">
               <div className="flex justify-between items-center">
-                <h1 className="text-3xl">{server?.server.name}</h1>
+                <h1 className="text-3xl">{server?.name}</h1>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -102,7 +102,7 @@ function ServerPanel() {
             </CardHeader>
             <CardContent>
               <p className="text-lg text-muted-foreground">
-                {server?.server.type} {server?.server.version}
+                {server?.type} {server?.version}
               </p>
               <div className="mt-4" />
               <ServerStatus server={server} styles="text-lg" />
@@ -110,12 +110,12 @@ function ServerPanel() {
               <Button
                 className="cursor-pointer"
                 onClick={
-                  server?.status.status === "stopped" ? handleStart : handleStop
+                  server?.status === "stopped" ? handleStart : handleStop
                 }
-                disabled={server?.status.status === "starting" || isLoading}
+                disabled={server?.status === "starting" || isLoading}
               >
                 <Power />{" "}
-                {server?.status.status === "stopped"
+                {server?.status === "stopped"
                   ? "Start Server"
                   : "Stop Server"}
               </Button>
@@ -128,10 +128,10 @@ function ServerPanel() {
         )}
 
         <div className="mt-4" />
-        {server?.server.id && (
+        {server?.id && (
           <Console
-            serverId={server?.server.id}
-            stopped={server?.status.status === "stopped"}
+            serverId={server?.id}
+            stopped={server?.status === "stopped"}
           />
         )}
 
